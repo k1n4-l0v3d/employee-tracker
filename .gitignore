@@ -1,0 +1,24 @@
+# Виртуальное окружение
+venv/
+
+# Python кэш
+__pycache__/
+*.pyc
+*.pyo
+
+# Переменные окружения
+.env
+*.env
+
+# БД и логи
+*.log
+*.sqlite
+*.db
+
+# IDE
+.vscode/
+.idea/
+
+# Windows
+Thumbs.db
+desktop.ini
