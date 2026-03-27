@@ -2,14 +2,18 @@ from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import os
+import re
 
 app = Flask(__name__)
 
-# Настройки БД — измените под свои данные
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+# Railway даёт postgres://, SQLAlchemy хочет postgresql://
+raw_url = os.environ.get(
     'DATABASE_URL',
-    'postgresql+psycopg://postgres:password@localhost:5432/employee_tracker'
+    'postgresql://postgres:password@localhost:5432/employee_tracker'
 )
+database_url = re.sub(r'^postgres://', 'postgresql://', raw_url)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -195,4 +199,5 @@ def get_stats():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
