@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>👁️ Досье Мирослава</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: rgba(255,255,255,0.04);
+    --surface-hover: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.08);
+    --border-bright: rgba(255,255,255,0.15);
+    --text: #e8e8f0;
+    --text-muted: rgba(232,232,240,0.45);
+    --red: #ff3b5c;
+    --red-glow: rgba(255,59,92,0.25);
+    --blue: #3b82f6;
+    --blue-glow: rgba(59,130,246,0.25);
+    --yellow: #fbbf24;
+    --yellow-glow: rgba(251,191,36,0.2);
+    --green: #10b981;
+    --green-glow: rgba(16,185,129,0.25);
+    --radius: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(255,59,92,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(59,130,246,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 50% 50%, rgba(251,191,36,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Scanline effect */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header-tag {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+
+  .header h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.5) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-sub {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── Stats bar ── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .stat-card:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-bright);
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .stat-card.red::before { background: linear-gradient(90deg, transparent, var(--red), transparent); }
+  .stat-card.blue::before { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
+  .stat-card.yellow::before { background: linear-gradient(90deg, transparent, var(--yellow), transparent); }
+  .stat-card.green::before { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+
+  .stat-number {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-card.red .stat-number { color: var(--red); text-shadow: 0 0 20px var(--red-glow); }
+  .stat-card.blue .stat-number { color: var(--blue); text-shadow: 0 0 20px var(--blue-glow); }
+  .stat-card.yellow .stat-number { color: var(--yellow); text-shadow: 0 0 20px var(--yellow-glow); }
+  .stat-card.green .stat-number { color: var(--green); text-shadow: 0 0 20px var(--green-glow); }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 28px;
+    width: fit-content;
+  }
+
+  .tab-btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-muted);
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .tab-btn:hover { color: var(--text); background: var(--surface-hover); }
+
+  .tab-btn.active {
+    color: var(--bg);
+    font-weight: 600;
+  }
+
+  .tab-btn.active.red-tab { background: var(--red); box-shadow: 0 0 16px var(--red-glow); }
+  .tab-btn.active.blue-tab { background: var(--blue); box-shadow: 0 0 16px var(--blue-glow); }
+  .tab-btn.active.green-tab { background: var(--green); box-shadow: 0 0 16px var(--green-glow); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── Section layout ── */
+  .section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 700px) {
+    .section { grid-template-columns: 1fr; }
+    .stats-bar { grid-template-columns: 1fr; }
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+
+  .card-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    color: var(--text-muted);
+  }
+
+  /* ── Form elements ── */
+  .field {
+    margin-bottom: 12px;
+  }
+
+  .field label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  .field input,
+  .field textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    resize: none;
+  }
+
+  .field input:focus,
+  .field textarea:focus {
+    border-color: var(--border-bright);
+    background: rgba(255,255,255,0.07);
+  }
+
+  .field input::placeholder,
+  .field textarea::placeholder {
+    color: rgba(232,232,240,0.2);
+  }
+
+  .btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 11px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+    margin-top: 4px;
+  }
+
+  .btn-red {
+    background: var(--red);
+    color: white;
+    box-shadow: 0 0 20px var(--red-glow);
+  }
+  .btn-red:hover { filter: brightness(1.15); transform: translateY(-1px); }
+  .btn-red:active { transform: translateY(0); }
+
+  .btn-blue {
+    background: var(--blue);
+    color: white;
+    box-shadow: 0 0 20px var(--blue-glow);
+  }
+  .btn-blue:hover { filter: brightness(1.15); transform: translateY(-1px); }
+  .btn-blue:active { transform: translateY(0); }
+
+  .btn-green {
+    background: var(--green);
+    color: white;
+    box-shadow: 0 0 20px var(--green-glow);
+  }
+  .btn-green:hover { filter: brightness(1.15); transform: translateY(-1px); }
+  .btn-green:active { transform: translateY(0); }
+
+  /* ── List ── */
+  .list-wrap {
+    max-height: 420px;
+    overflow-y: auto;
+  }
+
+  .list-wrap::-webkit-scrollbar { width: 4px; }
+  .list-wrap::-webkit-scrollbar-track { background: transparent; }
+  .list-wrap::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 2px; }
+
+  .list-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    position: relative;
+    transition: background 0.15s, border-color 0.15s;
+    animation: slideIn 0.25s ease;
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .list-item:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: var(--border-bright);
+  }
+
+  .list-item-main {
+    font-size: 13px;
+    margin-bottom: 4px;
+    padding-right: 32px;
+    line-height: 1.5;
+  }
+
+  .list-item-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .meta-tag {
+    font-size: 11px;
+    color: var(--text-muted);
+    padding: 2px 8px;
+    background: var(--surface);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .meta-time { font-size: 11px; color: var(--text-muted); }
+
+  .list-item-comment {
+    font-size: 12px;
+    color: var(--yellow);
+    margin-top: 6px;
+    opacity: 0.8;
+  }
+
+  .list-item-comment::before { content: '// '; opacity: 0.5; }
+
+  .delete-btn {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: color 0.15s, background 0.15s;
+  }
+
+  .delete-btn:hover { color: var(--red); background: var(--red-glow); }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  .empty-state span { display: block; font-size: 32px; margin-bottom: 12px; }
+
+  /* ── Counter badge ── */
+  .counter-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 20px;
+    background: rgba(255,59,92,0.06);
+    border: 1px solid rgba(255,59,92,0.2);
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+
+  .counter-big {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--red);
+    text-shadow: 0 0 30px var(--red-glow);
+    line-height: 1;
+  }
+
+  .counter-label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.1em; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--surface-hover);
+    border: 1px solid var(--border-bright);
+    border-radius: 10px;
+    padding: 14px 20px;
+    font-size: 13px;
+    color: var(--text);
+    z-index: 999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(10px);
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { border-color: rgba(16,185,129,0.4); }
+  .toast.error { border-color: rgba(255,59,92,0.4); }
+
+  /* ── Top series ── */
+  .series-rank {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .series-rank:last-child { border-bottom: none; }
+
+  .rank-num {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-muted);
+    width: 28px;
+    flex-shrink: 0;
+  }
+
+  .rank-num.top1 { color: var(--yellow); }
+
+  .rank-name { font-size: 13px; flex: 1; }
+  .rank-stats { font-size: 11px; color: var(--text-muted); text-align: right; }
+
+  .full-width { grid-column: 1 / -1; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-tag">🔴 Система мониторинга</div>
+    <h1>ДОСЬЕ МИРОСЛАВА</h1>
+    <div class="header-sub">Она не жена мне! Не говори так!</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar" style="grid-template-columns: repeat(4, 1fr)">
+    <div class="stat-card red">
+      <div class="stat-number" id="stat-questions">{{ total_questions }}</div>
+      <div class="stat-label">Глупых вопросов</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-number" id="stat-series">{{ total_series }}</div>
+      <div class="stat-label">Просмотров</div>
+    </div>
+    <div class="stat-card yellow">
+      <div class="stat-number" id="stat-hours">{{ (total_minutes // 60) }}</div>
+      <div class="stat-label">Часов сериалов</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-number" id="stat-flashdrives">{{ total_flashdrives }}</div>
+      <div class="stat-label">Сломано флешек</div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active red-tab" onclick="switchTab('questions', this)">🤦 Вопросы</button>
+    <button class="tab-btn blue-tab" onclick="switchTab('series', this)">📺 Сериалы</button>
+    <button class="tab-btn green-tab" onclick="switchTab('flashdrives', this)">💾 Флешки</button>
+    <button class="tab-btn" onclick="switchTab('stats', this)">📊 Аналитика</button>
+  </div>
+
+  <!-- Вопросы -->
+  <div id="tab-questions" class="tab-panel active">
+    <div class="section">
+      <div class="card">
+        <div class="card-title">Зафиксировать вопрос</div>
+        <div class="counter-display">
+          <div>
+            <div class="counter-big" id="q-counter">{{ total_questions }}</div>
+            <div class="counter-label">всего</div>
+          </div>
+          <div style="font-size:40px">🤦‍♂️</div>
+        </div>
+        <div class="field">
+          <label>Текст вопроса</label>
+          <textarea id="q-text" rows="3" placeholder="Что это было..."></textarea>
+        </div>
+        <div class="field">
+          <label>Комментарий (опционально)</label>
+          <input id="q-comment" type="text" placeholder="Ваша реакция">
+        </div>
+        <button class="btn btn-red" onclick="addQuestion()">+ Добавить вопрос</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">История глупостей</div>
+        <div class="list-wrap" id="q-list">
+          <div class="empty-state"><span>🦗</span>Пока тихо... не надолго</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Сериалы -->
+  <div id="tab-series" class="tab-panel">
+    <div class="section">
+      <div class="card">
+        <div class="card-title">Добавить просмотр</div>
+        <div class="field">
+          <label>Название сериала</label>
+          <input id="s-name" type="text" placeholder="Очень срочные дела">
+        </div>
+        <div class="field">
+          <label>Серия / сезон</label>
+          <input id="s-episode" type="text" placeholder="S02E04">
+        </div>
+        <div class="field">
+          <label>Продолжительность (мин)</label>
+          <input id="s-duration" type="number" placeholder="45" min="1">
+        </div>
+        <div class="field">
+          <label>Комментарий (опционально)</label>
+          <input id="s-comment" type="text" placeholder="В рабочее время, конечно">
+        </div>
+        <button class="btn btn-blue" onclick="addSeries()">+ Добавить просмотр</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Журнал просмотров</div>
+        <div class="list-wrap" id="s-list">
+          <div class="empty-state"><span>📺</span>Ещё не пойман за просмотром</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Флешки -->
+  <div id="tab-flashdrives" class="tab-panel">
+    <div class="section">
+      <div class="card">
+        <div class="card-title">Зафиксировать флешку</div>
+        <div class="counter-display" style="background:rgba(16,185,129,0.06);border-color:rgba(16,185,129,0.2)">
+          <div>
+            <div class="counter-big" id="f-counter" style="color:var(--green);text-shadow:0 0 30px var(--green-glow)">{{ total_flashdrives }}</div>
+            <div class="counter-label">сломано</div>
+          </div>
+          <div style="font-size:40px">💾</div>
+        </div>
+        <div class="field">
+          <label>Описание (опционально)</label>
+          <input id="f-desc" type="text" placeholder="Kingston 32GB, синяя">
+        </div>
+        <div class="field">
+          <label>Комментарий (опционально)</label>
+          <input id="f-comment" type="text" placeholder="Как он это вообще умудрился...">
+        </div>
+        <button class="btn btn-green" onclick="addFlashdrive()">+ Добавить флешку</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Кладбище флешек</div>
+        <div class="list-wrap" id="f-list">
+          <div class="empty-state"><span>💾</span>Пока все целы... пока</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Аналитика -->
+  <div id="tab-stats" class="tab-panel">
+    <div class="section">
+      <div class="card">
+        <div class="card-title">Итого</div>
+        <div class="series-rank">
+          <div style="flex:1;font-size:13px">Глупых вопросов задано</div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:20px;color:var(--red)" id="s-q-total">—</div>
+        </div>
+        <div class="series-rank">
+          <div style="flex:1;font-size:13px">Сломано флешек</div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:20px;color:var(--green)" id="s-f-total">—</div>
+        </div>
+        <div class="series-rank">
+          <div style="flex:1;font-size:13px">Просмотров записано</div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:20px;color:var(--blue)" id="s-s-total">—</div>
+        </div>
+        <div class="series-rank">
+          <div style="flex:1;font-size:13px">Минут потрачено на сериалы</div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:20px;color:var(--yellow)" id="s-min-total">—</div>
+        </div>
+        <div class="series-rank">
+          <div style="flex:1;font-size:13px">Часов потрачено на сериалы</div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:20px;color:var(--yellow)" id="s-hrs-total">—</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Топ сериалов</div>
+        <div id="top-series-list">
+          <div class="empty-state"><span>🏆</span>Данных пока нет</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── State ──
+let questionsData = [];
+let seriesData = [];
+let flashdrivesData = [];
+
+// ── Init ──
+loadQuestions();
+loadSeries();
+loadFlashdrives();
+
+// ── Tabs ──
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'stats') loadStats();
+}
+
+// ── Toast ──
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'toast show ' + type;
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ── Questions ──
+async function loadQuestions() {
+  const res = await fetch('/api/questions');
+  questionsData = await res.json();
+  renderQuestions();
+}
+
+function renderQuestions() {
+  const el = document.getElementById('q-list');
+  const counter = document.getElementById('q-counter');
+  const statEl = document.getElementById('stat-questions');
+  counter.textContent = questionsData.length;
+  statEl.textContent = questionsData.length;
+
+  if (!questionsData.length) {
+    el.innerHTML = '<div class="empty-state"><span>🦗</span>Пока тихо... не надолго</div>';
+    return;
+  }
+
+  el.innerHTML = questionsData.map(q => `
+    <div class="list-item" id="qi-${q.id}">
+      <button class="delete-btn" onclick="deleteQuestion(${q.id})">×</button>
+      <div class="list-item-main">${escHtml(q.text)}</div>
+      <div class="list-item-meta">
+        <span class="meta-time">${q.created_at}</span>
+      </div>
+      ${q.comment ? `<div class="list-item-comment">${escHtml(q.comment)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+async function addQuestion() {
+  const text = document.getElementById('q-text').value.trim();
+  const comment = document.getElementById('q-comment').value.trim();
+  if (!text) { toast('Введите текст вопроса', 'error'); return; }
+
+  const res = await fetch('/api/questions', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text, comment})
+  });
+
+  if (res.ok) {
+    document.getElementById('q-text').value = '';
+    document.getElementById('q-comment').value = '';
+    await loadQuestions();
+    toast('🤦 Зафиксировано!');
+  } else {
+    toast('Ошибка', 'error');
+  }
+}
+
+async function deleteQuestion(id) {
+  await fetch('/api/questions/' + id, {method: 'DELETE'});
+  await loadQuestions();
+  toast('Удалено');
+}
+
+// ── Series ──
+async function loadSeries() {
+  const res = await fetch('/api/series');
+  seriesData = await res.json();
+  renderSeries();
+}
+
+function renderSeries() {
+  const el = document.getElementById('s-list');
+  const statEl = document.getElementById('stat-series');
+  statEl.textContent = seriesData.length;
+
+  if (!seriesData.length) {
+    el.innerHTML = '<div class="empty-state"><span>📺</span>Ещё не пойман за просмотром</div>';
+    return;
+  }
+
+  el.innerHTML = seriesData.map(s => `
+    <div class="list-item" id="si-${s.id}">
+      <button class="delete-btn" onclick="deleteSeries(${s.id})">×</button>
+      <div class="list-item-main">📺 ${escHtml(s.series_name)}</div>
+      <div class="list-item-meta">
+        ${s.episode ? `<span class="meta-tag">${escHtml(s.episode)}</span>` : ''}
+        ${s.duration_minutes ? `<span class="meta-tag">${s.duration_minutes} мин</span>` : ''}
+        <span class="meta-time">${s.watched_at}</span>
+      </div>
+      ${s.comment ? `<div class="list-item-comment">${escHtml(s.comment)}</div>` : ''}
+    </div>
+  `).join('');
+
+  // Update hours stat
+  const totalMins = seriesData.reduce((sum, s) => sum + (s.duration_minutes || 0), 0);
+  document.getElementById('stat-hours').textContent = Math.floor(totalMins / 60);
+}
+
+async function addSeries() {
+  const series_name = document.getElementById('s-name').value.trim();
+  const episode = document.getElementById('s-episode').value.trim();
+  const duration_minutes = document.getElementById('s-duration').value;
+  const comment = document.getElementById('s-comment').value.trim();
+
+  if (!series_name) { toast('Введите название сериала', 'error'); return; }
+
+  const res = await fetch('/api/series', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({series_name, episode, duration_minutes, comment})
+  });
+
+  if (res.ok) {
+    document.getElementById('s-name').value = '';
+    document.getElementById('s-episode').value = '';
+    document.getElementById('s-duration').value = '';
+    document.getElementById('s-comment').value = '';
+    await loadSeries();
+    toast('📺 Поймали!');
+  } else {
+    toast('Ошибка', 'error');
+  }
+}
+
+async function deleteSeries(id) {
+  await fetch('/api/series/' + id, {method: 'DELETE'});
+  await loadSeries();
+  toast('Удалено');
+}
+
+// ── Stats ──
+async function loadStats() {
+  const res = await fetch('/api/stats');
+  const data = await res.json();
+
+  document.getElementById('s-q-total').textContent = data.total_questions;
+  document.getElementById('s-s-total').textContent = data.total_series;
+  document.getElementById('s-f-total').textContent = data.total_flashdrives;
+  document.getElementById('s-min-total').textContent = data.total_minutes;
+  document.getElementById('s-hrs-total').textContent = data.total_hours;
+
+  const el = document.getElementById('top-series-list');
+  if (!data.top_series.length) {
+    el.innerHTML = '<div class="empty-state"><span>🏆</span>Данных пока нет</div>';
+    return;
+  }
+
+  el.innerHTML = data.top_series.map((s, i) => `
+    <div class="series-rank">
+      <div class="rank-num ${i === 0 ? 'top1' : ''}">${i + 1}</div>
+      <div class="rank-name">${escHtml(s.name)}</div>
+      <div class="rank-stats">${s.count} раз · ${s.minutes} мин</div>
+    </div>
+  `).join('');
+}
+
+// ── Flashdrives ──
+async function loadFlashdrives() {
+  const res = await fetch('/api/flashdrives');
+  flashdrivesData = await res.json();
+  renderFlashdrives();
+}
+
+function renderFlashdrives() {
+  const el = document.getElementById('f-list');
+  const counter = document.getElementById('f-counter');
+  const statEl = document.getElementById('stat-flashdrives');
+  counter.textContent = flashdrivesData.length;
+  statEl.textContent = flashdrivesData.length;
+
+  if (!flashdrivesData.length) {
+    el.innerHTML = '<div class="empty-state"><span>💾</span>Пока все целы... пока</div>';
+    return;
+  }
+
+  el.innerHTML = flashdrivesData.map(f => `
+    <div class="list-item" id="fi-${f.id}">
+      <button class="delete-btn" onclick="deleteFlashdrive(${f.id})">×</button>
+      <div class="list-item-main">💾 ${f.description ? escHtml(f.description) : 'Безымянная жертва'}</div>
+      <div class="list-item-meta">
+        <span class="meta-time">${f.broken_at}</span>
+      </div>
+      ${f.comment ? `<div class="list-item-comment">${escHtml(f.comment)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+async function addFlashdrive() {
+  const description = document.getElementById('f-desc').value.trim();
+  const comment = document.getElementById('f-comment').value.trim();
+
+  const res = await fetch('/api/flashdrives', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({description, comment})
+  });
+
+  if (res.ok) {
+    document.getElementById('f-desc').value = '';
+    document.getElementById('f-comment').value = '';
+    await loadFlashdrives();
+    toast('💾 RIP флешка');
+  } else {
+    toast('Ошибка', 'error');
+  }
+}
+
+async function deleteFlashdrive(id) {
+  await fetch('/api/flashdrives/' + id, {method: 'DELETE'});
+  await loadFlashdrives();
+  toast('Удалено');
+}
+
+// ── Utils ──
+function escHtml(str) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(str));
+  return d.innerHTML;
+}
+</script>
+</body>
+</html>
